@@ -1,0 +1,227 @@
+1776424432: mosquitto version 2.1.2 starting
+1776424432: Config loaded from /mosquitto/config/mosquitto.conf.
+1776424432: Bridge support available.
+1776424432: Persistence support available.
+1776424432: TLS support available.
+1776424432: TLS-PSK support available.
+1776424432: Websockets support available.
+1776424432: Opening ipv4 listen socket on port 1883.
+1776424432: Opening ipv6 listen socket on port 1883.
+1776424432: mosquitto version 2.1.2 running
+1776424446: New connection from 172.18.0.6:39851 on port 1883.
+1776424446: New connection from 172.18.0.7:53703 on port 1883.
+1776424446: New client connected from 172.18.0.6:39851 as auto-2A55680D-151C-1212-AF73-AFEFBFBD116C (p4, c1, k60).
+1776424446: New client connected from 172.18.0.7:53703 as auto-F2DC20F3-404A-4818-3836-B2E075BEB356 (p4, c1, k60).
+1776425569: Client auto-F2DC20F3-404A-4818-3836-B2E075BEB356 [172.18.0.7:53703] disconnected: connection closed by client.
+1776425569: Client auto-2A55680D-151C-1212-AF73-AFEFBFBD116C [172.18.0.6:39851] disconnected: connection closed by client.
+1776425570: mosquitto version 2.1.2 terminating
+1776425570: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1776425577: mosquitto version 2.1.2 starting
+1776425577: Config loaded from /mosquitto/config/mosquitto.conf.
+1776425577: Bridge support available.
+1776425577: Persistence support available.
+1776425577: TLS support available.
+1776425577: TLS-PSK support available.
+1776425577: Websockets support available.
+1776425577: Opening ipv4 listen socket on port 1883.
+1776425577: Opening ipv6 listen socket on port 1883.
+1776425577: mosquitto version 2.1.2 running
+1776425585: New connection from 172.18.0.7:54723 on port 1883.
+1776425585: New client connected from 172.18.0.7:54723 as Simulador_Avanzado (p4, c1, k60).
+1776425586: New connection from 172.18.0.5:60109 on port 1883.
+1776425586: New client connected from 172.18.0.5:60109 as Consumidor_Ingesta (p4, c1, k60).
+1776425635: Client Simulador_Avanzado [172.18.0.7:54723] disconnected: connection closed by client.
+1776425635: Client Consumidor_Ingesta [172.18.0.5:60109] disconnected: connection closed by client.
+1776425639: mosquitto version 2.1.2 terminating
+1776425639: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1776425649: mosquitto version 2.1.2 starting
+1776425649: Config loaded from /mosquitto/config/mosquitto.conf.
+1776425649: Bridge support available.
+1776425649: Persistence support available.
+1776425649: TLS support available.
+1776425649: TLS-PSK support available.
+1776425649: Websockets support available.
+1776425649: Opening ipv4 listen socket on port 1883.
+1776425649: Opening ipv6 listen socket on port 1883.
+1776425649: mosquitto version 2.1.2 running
+1776425659: New connection from 172.18.0.7:52991 on port 1883.
+1776425659: New client connected from 172.18.0.7:52991 as Consumidor_Ingesta (p4, c1, k60).
+1776425660: New connection from 172.18.0.5:41103 on port 1883.
+1776425660: New client connected from 172.18.0.5:41103 as Simulador_Avanzado (p4, c1, k60).
+1776426338: Client Consumidor_Ingesta [172.18.0.7:52991] disconnected: connection closed by client.
+1776426338: Client Simulador_Avanzado [172.18.0.5:41103] disconnected: connection closed by client.
+1776426341: mosquitto version 2.1.2 terminating
+1776426341: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1776426360: mosquitto version 2.1.2 starting
+1776426360: Config loaded from /mosquitto/config/mosquitto.conf.
+1776426360: Bridge support available.
+1776426360: Persistence support available.
+1776426360: TLS support available.
+1776426360: TLS-PSK support available.
+1776426360: Websockets support available.
+1776426360: Opening ipv4 listen socket on port 1883.
+1776426360: Opening ipv6 listen socket on port 1883.
+1776426360: mosquitto version 2.1.2 running
+1776426365: New connection from 172.18.0.6:57915 on port 1883.
+1776426365: New client connected from 172.18.0.6:57915 as Simulador_Avanzado (p4, c1, k60).
+1776426366: New connection from 172.18.0.7:58951 on port 1883.
+1776426366: New client connected from 172.18.0.7:58951 as Consumidor_Ingesta (p4, c1, k60).
+1776426606: Client Simulador_Avanzado [172.18.0.6:57915] disconnected: connection closed by client.
+1776426606: Client Consumidor_Ingesta [172.18.0.7:58951] disconnected: connection closed by client.
+1776426607: mosquitto version 2.1.2 terminating
+1776426607: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1776426613: mosquitto version 2.1.2 starting
+1776426613: Config loaded from /mosquitto/config/mosquitto.conf.
+1776426613: Bridge support available.
+1776426613: Persistence support available.
+1776426613: TLS support available.
+1776426613: TLS-PSK support available.
+1776426613: Websockets support available.
+1776426613: Opening ipv4 listen socket on port 1883.
+1776426613: Opening ipv6 listen socket on port 1883.
+1776426613: mosquitto version 2.1.2 running
+1776426622: New connection from 172.18.0.6:48891 on port 1883.
+1776426622: New client connected from 172.18.0.6:48891 as Simulador_Avanzado (p4, c1, k60).
+1776426622: New connection from 172.18.0.7:59193 on port 1883.
+1776426622: New client connected from 172.18.0.7:59193 as Consumidor_Ingesta (p4, c1, k60).
+1776426785: Client Simulador_Avanzado [172.18.0.6:48891] disconnected: connection closed by client.
+1776426785: Client Consumidor_Ingesta [172.18.0.7:59193] disconnected: connection closed by client.
+1776426786: mosquitto version 2.1.2 terminating
+1776426786: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1776426795: mosquitto version 2.1.2 starting
+1776426795: Config loaded from /mosquitto/config/mosquitto.conf.
+1776426795: Bridge support available.
+1776426795: Persistence support available.
+1776426795: TLS support available.
+1776426795: TLS-PSK support available.
+1776426795: Websockets support available.
+1776426795: Opening ipv4 listen socket on port 1883.
+1776426795: Opening ipv6 listen socket on port 1883.
+1776426795: mosquitto version 2.1.2 running
+1776426804: New connection from 172.18.0.7:53685 on port 1883.
+1776426804: New client connected from 172.18.0.7:53685 as Simulador_Avanzado (p4, c1, k60).
+1776426805: New connection from 172.18.0.5:34931 on port 1883.
+1776426805: New client connected from 172.18.0.5:34931 as Consumidor_Ingesta (p4, c1, k60).
+1776426934: New connection from 172.18.0.1:39864 on port 1883.
+1776426934: New client connected from 172.18.0.1:39864 as auto-B218EB56-60D7-C45B-0CDF-CBD93ADDFD2E (p4, c1, k60).
+1776426940: Client auto-B218EB56-60D7-C45B-0CDF-CBD93ADDFD2E [172.18.0.1:39864] disconnected: connection closed by client.
+1776427049: Client Consumidor_Ingesta [172.18.0.5:34931] disconnected: connection closed by client.
+1776427051: New connection from 172.18.0.5:39685 on port 1883.
+1776427051: New client connected from 172.18.0.5:39685 as Consumidor_Ingesta (p4, c1, k60).
+1776427500: Client Simulador_Avanzado [172.18.0.7:53685] disconnected: connection closed by client.
+1776427500: Client Consumidor_Ingesta [172.18.0.5:39685] disconnected: connection closed by client.
+1776427501: mosquitto version 2.1.2 terminating
+1776427501: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1776427514: mosquitto version 2.1.2 starting
+1776427514: Config loaded from /mosquitto/config/mosquitto.conf.
+1776427514: Bridge support available.
+1776427514: Persistence support available.
+1776427514: TLS support available.
+1776427514: TLS-PSK support available.
+1776427514: Websockets support available.
+1776427514: Opening ipv4 listen socket on port 1883.
+1776427514: Opening ipv6 listen socket on port 1883.
+1776427514: mosquitto version 2.1.2 running
+1776427523: New connection from 172.18.0.7:50919 on port 1883.
+1776427523: New client connected from 172.18.0.7:50919 as Simulador_Avanzado (p4, c1, k60).
+1776427524: New connection from 172.18.0.6:47987 on port 1883.
+1776427524: New client connected from 172.18.0.6:47987 as Consumidor_Final (p4, c1, k60).
+1776427761: Client Simulador_Avanzado [172.18.0.7:50919] disconnected: connection closed by client.
+1776427761: Client Consumidor_Final [172.18.0.6:47987] disconnected: connection closed by client.
+1776427764: mosquitto version 2.1.2 terminating
+1776427764: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1776427848: mosquitto version 2.1.2 starting
+1776427848: Config loaded from /mosquitto/config/mosquitto.conf.
+1776427848: Bridge support available.
+1776427848: Persistence support available.
+1776427848: TLS support available.
+1776427848: TLS-PSK support available.
+1776427848: Websockets support available.
+1776427848: Opening ipv4 listen socket on port 1883.
+1776427848: Opening ipv6 listen socket on port 1883.
+1776427848: mosquitto version 2.1.2 running
+1776427856: New connection from 172.18.0.7:60225 on port 1883.
+1776427856: New client connected from 172.18.0.7:60225 as Simulador_Avanzado (p4, c1, k60).
+1776427856: New connection from 172.18.0.6:54741 on port 1883.
+1776427856: New client connected from 172.18.0.6:54741 as Consumidor_Ingesta (p4, c1, k60).
+1776427904: Client Consumidor_Ingesta [172.18.0.6:54741] disconnected: connection closed by client.
+1776427905: New connection from 172.18.0.6:50231 on port 1883.
+1776427905: New client connected from 172.18.0.6:50231 as Consumidor_Ingesta (p4, c1, k60).
+1776427961: Client Consumidor_Ingesta [172.18.0.6:50231] disconnected: connection closed by client.
+1776427962: New connection from 172.18.0.6:37789 on port 1883.
+1776427962: New client connected from 172.18.0.6:37789 as Consumidor_Ingesta (p4, c1, k60).
+1776428054: Client Simulador_Avanzado [172.18.0.7:60225] disconnected: connection closed by client.
+1776428054: Client Consumidor_Ingesta [172.18.0.6:37789] disconnected: connection closed by client.
+1776428054: mosquitto version 2.1.2 terminating
+1776428054: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1776428063: mosquitto version 2.1.2 starting
+1776428063: Config loaded from /mosquitto/config/mosquitto.conf.
+1776428063: Bridge support available.
+1776428063: Persistence support available.
+1776428063: TLS support available.
+1776428063: TLS-PSK support available.
+1776428063: Websockets support available.
+1776428063: Opening ipv4 listen socket on port 1883.
+1776428063: Opening ipv6 listen socket on port 1883.
+1776428063: mosquitto version 2.1.2 running
+1776428071: New connection from 172.18.0.5:54443 on port 1883.
+1776428071: New client connected from 172.18.0.5:54443 as Simulador_Avanzado (p4, c1, k60).
+1776428071: New connection from 172.18.0.6:53351 on port 1883.
+1776428071: New client connected from 172.18.0.6:53351 as Consumidor_Ingesta (p4, c1, k60).
+1776428389: Client Consumidor_Ingesta [172.18.0.6:53351] disconnected: connection closed by client.
+1776428389: Client Simulador_Avanzado [172.18.0.5:54443] disconnected: connection closed by client.
+1776428389: mosquitto version 2.1.2 terminating
+1776428389: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1776504759: mosquitto version 2.1.2 starting
+1776504759: Config loaded from /mosquitto/config/mosquitto.conf.
+1776504759: Bridge support available.
+1776504759: Persistence support available.
+1776504759: TLS support available.
+1776504759: TLS-PSK support available.
+1776504759: Websockets support available.
+1776504759: Opening ipv4 listen socket on port 1883.
+1776504759: Opening ipv6 listen socket on port 1883.
+1776504759: mosquitto version 2.1.2 running
+1776504764: New connection from 172.20.0.6:44451 on port 1883.
+1776504764: New client connected from 172.20.0.6:44451 as auto-486DA601-946C-C4A5-3F4F-E1317E538819 (p4, c1, k60).
+1776505398: Client auto-486DA601-946C-C4A5-3F4F-E1317E538819 [172.20.0.6:44451] disconnected: connection closed by client.
+1776505399: mosquitto version 2.1.2 terminating
+1776505399: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1776505401: mosquitto version 2.1.2 starting
+1776505401: Config loaded from /mosquitto/config/mosquitto.conf.
+1776505401: Bridge support available.
+1776505401: Persistence support available.
+1776505401: TLS support available.
+1776505401: TLS-PSK support available.
+1776505401: Websockets support available.
+1776505401: Opening ipv4 listen socket on port 1883.
+1776505401: Opening ipv6 listen socket on port 1883.
+1776505401: mosquitto version 2.1.2 running
+1776505405: New connection from 172.20.0.5:41583 on port 1883.
+1776505405: New client connected from 172.20.0.5:41583 as auto-5D4285E6-F505-1620-64E0-7B498E672701 (p4, c1, k60).
+1776505406: New connection from 172.20.0.4:54725 on port 1883.
+1776505406: New client connected from 172.20.0.4:54725 as Consumidor_Ingesta (p4, c1, k60).
+1776507196: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1776508994: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1776509434: Client Consumidor_Ingesta [172.20.0.4:54725] disconnected: connection closed by client.
+1776509434: Client auto-5D4285E6-F505-1620-64E0-7B498E672701 [172.20.0.5:41583] disconnected: connection closed by client.
+1776509435: mosquitto version 2.1.2 terminating
+1776509435: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1776696344: mosquitto version 2.1.2 starting
+1776696344: Config loaded from /mosquitto/config/mosquitto.conf.
+1776696344: Bridge support available.
+1776696344: Persistence support available.
+1776696344: TLS support available.
+1776696344: TLS-PSK support available.
+1776696344: Websockets support available.
+1776696344: Opening ipv4 listen socket on port 1883.
+1776696344: Opening ipv6 listen socket on port 1883.
+1776696344: mosquitto version 2.1.2 running
+1776696345: New connection from 172.20.0.5:41169 on port 1883.
+1776696345: New client connected from 172.20.0.5:41169 as auto-A0DE9B4D-7223-F641-D213-C30F4C2F3408 (p4, c1, k60).
+1776696346: New connection from 172.20.0.6:44651 on port 1883.
+1776696346: New client connected from 172.20.0.6:44651 as Consumidor_Ingesta (p4, c1, k60).
+1776696965: Client auto-A0DE9B4D-7223-F641-D213-C30F4C2F3408 [172.20.0.5:41169] disconnected: connection closed by client.
+1776696965: Client Consumidor_Ingesta [172.20.0.6:44651] disconnected: connection closed by client.
+1776696965: mosquitto version 2.1.2 terminating
+1776696965: Saving in-memory database to /mosquitto/data//mosquitto.db.

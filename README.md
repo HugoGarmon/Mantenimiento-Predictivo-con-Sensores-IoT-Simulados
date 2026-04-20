@@ -1,18 +1,31 @@
 # 🏭 AI Predictive Maintenance System
 
-Sistema de monitorización industrial en tiempo real con detección de anomalías y predicción de fallos.
+Sistema integral de monitorización industrial con detección de anomalías y predicción de fallos (RUL) mediante Deep Learning.
 
-## 🚀 Componentes del Módulo de Desarrollo (Semana 1)
+## 🏗️ Arquitectura del Proyecto
 
-### 1. Simulador de Sensores (`src/simulator.py`)
-Genera datos sintéticos de telemetría (Vibración, Temperatura, Presión, RPM) y los envía vía MQTT a un broker.
+El sistema se divide en cuatro módulos principales:
+1.  **Simulación e Ingesta:** Generación de datos IoT vía MQTT.
+2.  **Backend (API):** Servidor FastAPI que centraliza el acceso a los modelos de IA.
+3.  **Frontend (Dashboard):** Panel interactivo en Streamlit para visualización en tiempo real.
+4.  **Modelos IA:** Autoencoders y LSTMs para análisis predictivo (en desarrollo).
 
-### 2. Ingester de Datos (`src/ingester.py`)
-Suscriptor MQTT que recibe la telemetría en tiempo real y procesa los paquetes JSON.
+## 🚀 Estado del Desarrollo
 
-## 🛠️ Cómo ejecutar
-1. Crear entorno virtual: `python -m venv venv`
-2. Activar: `.\venv\Scripts\activate` (Windows)
-3. Instalar dependencias: `pip install paho-mqtt`
-4. Ejecutar Ingester: `python src/ingester.py`
-5. Ejecutar Simulador: `python src/simulator.py`
+### Semana 1: Infraestructura Base ✅
+- [x] Estructura de carpetas y repositorio Git.
+- [x] Simulador de sensores MQTT (`src/simulator.py`).
+- [x] Script de ingesta de telemetría (`src/ingester.py`).
+
+### Semana 2: Backend y Dashboard 🚧
+- [x] Esqueleto de la API REST con **FastAPI** (`api/main.py`).
+- [x] Interfaz de usuario con **Streamlit** (`app/main.py`).
+- [ ] Conexión real Ingester -> Base de Datos -> API.
+
+## 🛠️ Guía de Ejecución
+
+### 1. Preparación del Entorno
+```powershell
+python -m venv venv
+.\venv\Scripts\activate
+pip install -r requirements.txt  # (O instalar: paho-mqtt fastapi uvicorn streamlit requests)
