@@ -1,31 +1,41 @@
 # 🏭 AI Predictive Maintenance System
 
-Sistema integral de monitorización industrial con detección de anomalías y predicción de fallos (RUL) mediante Deep Learning.
+Sistema integral de monitorización industrial basado en microservicios para la detección de anomalías y predicción de fallos (RUL) mediante Deep Learning.
 
-## 🏗️ Arquitectura del Proyecto
+## 🏗️ Arquitectura del Sistema
 
-El sistema se divide en cuatro módulos principales:
-1.  **Simulación e Ingesta:** Generación de datos IoT vía MQTT.
-2.  **Backend (API):** Servidor FastAPI que centraliza el acceso a los modelos de IA.
-3.  **Frontend (Dashboard):** Panel interactivo en Streamlit para visualización en tiempo real.
-4.  **Modelos IA:** Autoencoders y LSTMs para análisis predictivo (en desarrollo).
+El proyecto utiliza una arquitectura de microservicios contenedorizada con **Docker**:
+
+1.  **Broker MQTT (Mosquitto):** El sistema de mensajería que centraliza el flujo de datos.
+2.  **Sensor Simulator (Python):** Generador de telemetría industrial (vibración, temperatura, RPM, presión).
+3.  **Data Consumer/Ingester (Python):** Suscriptor MQTT que procesa y persiste los datos en tiempo real.
+4.  **Time Series DB (InfluxDB 2):** Base de datos optimizada para el almacenamiento de métricas de sensores.
+5.  **Backend API (FastAPI):** Servicio que expone los datos y predicciones de IA.
+6.  **Dashboard (Streamlit):** Interfaz visual para la monitorización de activos.
 
 ## 🚀 Estado del Desarrollo
 
-### Semana 1: Infraestructura Base ✅
-- [x] Estructura de carpetas y repositorio Git.
-- [x] Simulador de sensores MQTT (`src/simulator.py`).
-- [x] Script de ingesta de telemetría (`src/ingester.py`).
+### Semana 1: Infraestructura & Ingesta ✅
+- [x] Configuración de Docker Compose y Redes.
+- [x] Despliegue de Broker MQTT y Base de Datos InfluxDB.
+- [x] Desarrollo del Ingester con persistencia real.
 
-### Semana 2: Backend y Dashboard 🚧
-- [x] Esqueleto de la API REST con **FastAPI** (`api/main.py`).
-- [x] Interfaz de usuario con **Streamlit** (`app/main.py`).
-- [ ] Conexión real Ingester -> Base de Datos -> API.
+### Semana 2: API & Dashboard ✅
+- [x] Esqueleto de la API REST con **FastAPI**.
+- [x] Integración de la API con los datos reales de InfluxDB.
+- [x] Dashboard interactivo con **Streamlit**.
 
 ## 🛠️ Guía de Ejecución
 
-### 1. Preparación del Entorno
+### 1. Requisitos previos
+- Docker & Docker Desktop.
+- Python 3.9+ (para desarrollo local).
+
+### 2. Levantar la infraestructura (Docker)
+Desde la raíz del proyecto, ejecuta:
 ```powershell
-python -m venv venv
-.\venv\Scripts\activate
-pip install -r requirements.txt  # (O instalar: paho-mqtt fastapi uvicorn streamlit requests)
+# Crear la red si es la primera vez
+docker network create shared-network
+
+# Levantar todos los servicios
+docker-compose up -d --build
