@@ -25,10 +25,12 @@ El proyecto utiliza una arquitectura de microservicios contenedorizada con **Doc
 - [x] Integración de la API con los datos reales de InfluxDB.
 - [x] Dashboard interactivo inicial con **Streamlit**.
 
-### Semana 3: Inteligencia y Monitorización en Tiempo Real 🚧
-- [x] Implementación de lógica de **Health Score** y **RUL** (Mockups de IA).
-- [x] Dashboard dinámico con refresco automático y alertas visuales.
-- [x] Endpoint `/predict` operativo para consumo de frontend.
+### Semana 3: Inteligencia y Monitorización en Tiempo Real ✅
+- [x] **Inferencia de IA Real:** Sustitución de mocks por modelos entrenados (Autoencoder, LSTM y XGBoost).
+- [x] **Lógica de Health Score:** Cálculo dinámico basado en el error de reconstrucción del Autoencoder.
+- [x] **Predicción de RUL:** Estimación de vida útil mediante red neuronal LSTM con ventana de 30 pasos.
+- [x] **Clasificación de Fallos:** Implementación de XGBoost para identificar tipos de anomalía.
+- [x] **Dashboard Pro:** Gráficas de tendencia (Salud/RUL) y tabla de Registro de Incidencias con persistencia de sesión.
 
 ## 🛠️ Guía de Ejecución
 
