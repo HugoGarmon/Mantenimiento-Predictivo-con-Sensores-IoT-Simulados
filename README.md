@@ -199,8 +199,6 @@ industrial-predictive-ai/
 │   └── mosquitto_data/
 ├── influxdb/
 │   └── flux-scripts/
-├── data/
-├── docs/
 ├── compose.yml                  # Orquestación Docker
 ├── mosquitto_data/
 ├── mosquitto_log/
