@@ -175,28 +175,35 @@ dir -Recurse -Exclude venv | head -20
 ls -la
 ```
 
-Estructura esperada:
+Estructura actual:
 ```
 industrial-predictive-ai/
 ├── api/
-│   └── main.py              # FastAPI Backend
+│   └── main.py                  # FastAPI Backend
 ├── app/
-│   └── main.py              # Streamlit Dashboard
+│   └── main.py                  # Streamlit Dashboard
 ├── models/
-│   ├── lstm_model.keras     # Modelo LSTM (RUL)
+│   ├── lstm_model.keras         # Modelo LSTM (RUL)
 │   ├── autoencoder_model.keras  # Modelo Autoencoder (Health)
-│   └── xgboost_model.pkl    # Modelo XGBoost (Fallo)
+│   └── xgboost_model.json       # Modelo XGBoost (Fallo)
+├── notebooks/
+│   ├── 01_EDA_Preprocesamiento.ipynb
+│   ├── 02_Modelos_IA.ipynb
+│   └── 03_XAI_Validacion.ipynb
 ├── mosquitto/
 │   ├── src/
-│   │   ├── sensor_simulator.py      # Generador de datos
-│   │   ├── data_consumer.py         # Ingester MQTT→InfluxDB
+│   │   ├── sensor_simulator.py  # Generador de datos
+│   │   ├── data_consumer.py     # Ingester MQTT→InfluxDB
 │   │   └── requirements.txt
-│   └── mosquitto.conf
+│   ├── mosquitto.conf
+│   └── mosquitto_data/
 ├── influxdb/
-│   ├── .env.influxdb2-admin-username
-│   ├── .env.influxdb2-admin-password
-│   └── .env.influxdb2-admin-token
-├── compose.yml              # Orquestación Docker
+│   └── flux-scripts/
+├── data/
+├── docs/
+├── compose.yml                  # Orquestación Docker
+├── mosquitto_data/
+├── mosquitto_log/
 └── README.md
 ```
 
@@ -291,7 +298,7 @@ python3 -m venv venv
 source venv/bin/activate
 
 # Instalar dependencias
-pip install fastapi uvicorn tensorflow joblib influxdb-client
+pip install fastapi uvicorn tensorflow xgboost influxdb-client
 
 # Ejecutar API
 python api/main.py
@@ -431,7 +438,7 @@ docker network prune -f
 models/
 ├── lstm_model.keras           (425 KB) → RUL Prediction
 ├── autoencoder_model.keras    (91 KB)  → Anomaly Detection
-└── xgboost_model.pkl         (221 KB) → Fault Classification
+└── xgboost_model.json         (221 KB) → Fault Classification
 ```
 
 ### `/mosquitto` - IoT Data Pipeline
@@ -671,7 +678,7 @@ kill -9 <PID>
 
 ### ❌ "Models not found" en API
 
-**Causa**: Falta la carpeta `models/` con archivos `.keras` y `.pkl`
+**Causa**: Falta la carpeta `models/` con archivos `.keras` y `.json`
 
 **Solución**:
 ```bash

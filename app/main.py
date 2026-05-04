@@ -39,10 +39,11 @@ while True:
 
         # 3. Gestión de Eventos (Solo si hay anomalía)
         if pred['is_anomaly']:
+            cause_text = pred.get('cause') or f"Código {pred['failure_code']}"
             new_event = {
                 "Hora": curr_time,
                 "Estado": pred['status'],
-                "Causa": f"Código {pred['failure_code']}",
+                "Causa": cause_text,
                 "Salud": f"{pred['health_score']}%"
             }
             # Evitar duplicados en el mismo segundo
