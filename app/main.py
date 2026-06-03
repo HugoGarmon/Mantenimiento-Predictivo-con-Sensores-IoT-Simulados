@@ -6,7 +6,7 @@ from datetime import datetime
 
 st.set_page_config(page_title="Monitor Predictivo 4.0 - IA Real", layout="wide")
 
-st.title("🏭 Monitorización Proactiva - Machine_01")
+st.title("🏭 Monitorización Proactiva - NASA C-MAPSS")
 
 # --- LÓGICA DE PERSISTENCIA ---
 if 'history_df' not in st.session_state:
@@ -53,18 +53,46 @@ while True:
 
         # --- 4. DIBUJAR INTERFAZ ---
         with placeholder.container():
+            # TÍTULO DEL MOTOR Y CICLO
+            st.subheader(f"Motor Simulado: {int(data.get('id_motor', 1))} | Ciclo Activo: {int(data.get('ciclo', 0))}")
+            
             # ALERTAS
             if pred['is_anomaly']:
                 st.error(f"🚨 ALERTAS ACTIVAS: {pred['status']} (Código de Fallo: {pred['failure_code']})")
             else:
                 st.success("✅ SISTEMA OPERANDO EN PARÁMETROS NORMALES")
 
-            # MÉTRICAS
+            # MÉTRICAS CRÍTICAS
             col1, col2, col3, col4 = st.columns(4)
-            col1.metric("Temperatura", f"{data['temperatura']} °C")
-            col2.metric("Vibración", f"{data['vibracion']} mm/s")
-            col3.metric("Presión", f"{data['presion']} bar")
-            col4.metric("RPM", f"{data['rpm']}")
+            col1.metric("Temp LPC (S4)", f"{data.get('sensor_4', 0.0):.2f} K")
+            col2.metric("Pres LPC (S11)", f"{data.get('sensor_11', 0.0):.2f} psia")
+            col3.metric("Bypass Ratio (S15)", f"{data.get('sensor_15', 0.0):.4f}")
+            col4.metric("Bleed LPT (S21)", f"{data.get('sensor_21', 0.0):.4f} kg/s")
+
+            # EXPANDER CON TODOS LOS SENSORES
+            with st.expander("🔍 Ver todos los 21 sensores y 3 ajustes C-MAPSS en tiempo real"):
+                col_s1, col_s2, col_s3, col_s4 = st.columns(4)
+                
+                # Ajustes
+                col_s1.write("**Ajustes:**")
+                col_s1.write(f"- Ajuste 1: {data.get('ajuste_1', 0.0):.4f}")
+                col_s1.write(f"- Ajuste 2: {data.get('ajuste_2', 0.0):.4f}")
+                col_s1.write(f"- Ajuste 3: {data.get('ajuste_3', 0.0):.1f}")
+                
+                # Sensores 1-7
+                col_s2.write("**Sensores 1-7:**")
+                for i in range(1, 8):
+                    col_s2.write(f"- Sensor {i}: {data.get(f'sensor_{i}', 0.0):.4f}")
+                    
+                # Sensores 8-14
+                col_s3.write("**Sensores 8-14:**")
+                for i in range(8, 15):
+                    col_s3.write(f"- Sensor {i}: {data.get(f'sensor_{i}', 0.0):.4f}")
+                    
+                # Sensores 15-21
+                col_s4.write("**Sensores 15-21:**")
+                for i in range(15, 22):
+                    col_s4.write(f"- Sensor {i}: {data.get(f'sensor_{i}', 0.0):.4f}")
 
             st.markdown("---")
 

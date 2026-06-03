@@ -1,103 +1,127 @@
 import paho.mqtt.client as mqtt
 import json
 import time
-import random
 import os
 from datetime import datetime
 
-# --- CONFIGURACIÓN PARA DOCKER ---
-# Usamos el nombre del servicio en el compose.yml. Si falla, intenta con 'localhost'
-BROKER = os.getenv("BROKER_HOST", "mosquitto") 
-PORT = 1883
+# --- CONFIGURACIÓN MQTT ---
+BROKER = os.getenv("BROKER_HOST", "mosquitto")
+PORT = int(os.getenv("BROKER_PORT", "1883"))
 TOPIC = "factory/machine_01/telemetry"
 
-def generate_sensor_data():
-    """Simula datos de una máquina industrial con anomalías más agresivas.
-    - 25% de probabilidad de anomalía.
-    - Dentro de anomalías, ~12% son catastróficas (picos muy altos/bajos).
-    """
-    # Probabilidades
-    anomaly_chance = random.random() < 0.15
+DATA_FILE = "test_FD001.txt"
 
-    if anomaly_chance:
-        # 12% de las anomalías serán catastróficas
-        catastrophic = random.random() < 0.12
-        anomaly_type = random.choice(['temperature', 'vibration', 'pressure', 'rpm'])
-
-        if catastrophic:
-            print(f"⚠️  🚨 ANOMALÍA CATASTRÓFICA: {anomaly_type.upper()} 🚨")
-            if anomaly_type == 'temperature':
-                temperature = round(random.uniform(200.0, 500.0), 2)  # pico extremo
-                vibration = round(random.uniform(2.5, 4.8), 2)
-                pressure = round(random.uniform(95.0, 105.0), 2)
-                rpm = random.randint(1800, 3200)
-            elif anomaly_type == 'vibration':
-                vibration = round(random.uniform(20.0, 60.0), 2)    # vibración muy alta
-                temperature = round(random.uniform(65.0, 90.0), 2)
-                pressure = round(random.uniform(95.0, 105.0), 2)
-                rpm = random.randint(1800, 3200)
-            elif anomaly_type == 'pressure':
-                # puede ser caída drástica o pico enorme
-                if random.random() < 0.5:
-                    pressure = round(random.uniform(0.0, 30.0), 2)   # caída
-                else:
-                    pressure = round(random.uniform(300.0, 600.0), 2) # pico
-                temperature = round(random.uniform(65.0, 90.0), 2)
-                vibration = round(random.uniform(2.5, 4.8), 2)
-                rpm = random.randint(1800, 3200)
-            else:  # rpm
-                rpm = random.randint(8000, 20000)  # sobre-rev
-                temperature = round(random.uniform(65.0, 90.0), 2)
-                vibration = round(random.uniform(2.5, 4.8), 2)
-                pressure = round(random.uniform(95.0, 105.0), 2)
-        else:
-            print(f"⚠️  🚨 ANOMALÍA: {anomaly_type.upper()} EN RANGO EXTREMO 🚨")
-            # Anomalía moderada
-            vibration = round(random.uniform(8.5, 20.0), 2) if anomaly_type == 'vibration' else round(random.uniform(2.5, 4.8), 2)
-            temperature = round(random.uniform(110.0, 180.0), 2) if anomaly_type == 'temperature' else round(random.uniform(65.0, 90.0), 2)
-            pressure = round(random.uniform(140.0, 220.0), 2) if anomaly_type == 'pressure' else round(random.uniform(95.0, 105.0), 2)
-            rpm = random.randint(4500, 7000) if anomaly_type == 'rpm' else random.randint(1800, 3200)
-    else:
-        # Valores normales
-        vibration = round(random.uniform(2.5, 4.8), 2)
-        temperature = round(random.uniform(65.0, 90.0), 2)
-        pressure = round(random.uniform(95.0, 105.0), 2)
-        rpm = random.randint(1800, 3200)
+def load_dataset(file_path):
+    """Carga y procesa el archivo de datos C-MAPSS."""
+    if not os.path.exists(file_path):
+        print(f"❌ Archivo no encontrado en: {os.path.abspath(file_path)}")
+        return {}
     
-    return {
-        "timestamp": datetime.now().isoformat(),
-        "vibration": vibration,
-        "temperature": temperature,
-        "pressure": pressure,
-        "rpm": rpm
-    }
+    print(f"📖 Cargando datos desde {file_path}...")
+    motors_data = {}
+    try:
+        with open(file_path, "r") as f:
+            for line in f:
+                parts = line.strip().split()
+                if len(parts) < 26:
+                    continue
+                
+                id_motor = int(parts[0])
+                ciclo = int(parts[1])
+                
+                # Crear diccionario para esta fila
+                row = {
+                    "id_motor": id_motor,
+                    "ciclo": ciclo,
+                    "ajuste_1": float(parts[2]),
+                    "ajuste_2": float(parts[3]),
+                    "ajuste_3": float(parts[4])
+                }
+                
+                # Agregar sensores 1 al 21
+                for idx in range(1, 22):
+                    row[f"sensor_{idx}"] = float(parts[4 + idx])
+                
+                if id_motor not in motors_data:
+                    motors_data[id_motor] = []
+                motors_data[id_motor].append(row)
+                
+        print(f"✅ Se cargaron {len(motors_data)} motores en total.")
+        return motors_data
+    except Exception as e:
+        print(f"❌ Error al leer el dataset: {e}")
+        return {}
 
 def run_simulator():
     client = mqtt.Client(callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
     
-    # Bucle de conexión: reintenta hasta que el broker esté arriba
+    # Intentar conectar al broker MQTT
     connected = False
     while not connected:
         try:
-            print(f"🔄 Intentando conectar al broker MQTT en: {BROKER}...")
+            print(f"🔄 Intentando conectar al broker MQTT en: {BROKER}:{PORT}...")
             client.connect(BROKER, PORT)
             connected = True
         except Exception as e:
             print(f"⏳ Broker no disponible, reintentando en 5s... ({e})")
             time.sleep(5)
 
+    print("🔌 Conectado al broker MQTT exitosamente.")
+    
+    # Cargar datos
+    motors_data = load_dataset(DATA_FILE)
+    if not motors_data:
+        print("⚠ No se pudieron cargar datos del dataset. Usando fallback básico...")
+        # Fallback simple por si no existe el archivo
+        motors_data = {
+            1: [
+                {
+                    "id_motor": 1,
+                    "ciclo": c,
+                    "ajuste_1": 0.0,
+                    "ajuste_2": 0.0,
+                    "ajuste_3": 100.0,
+                    **{f"sensor_{i}": 500.0 + c * 0.1 for i in range(1, 22)}
+                }
+                for c in range(1, 101)
+            ]
+        }
+
+    motor_ids = sorted(list(motors_data.keys()))
+    motor_idx = 0
+    cycle_idx = 0
+    
     print(f"🚀 Simulador ACTIVO. Enviando datos a {TOPIC}...")
     
     try:
         while True:
-            data = generate_sensor_data()
-            payload = json.dumps(data)
-            client.publish(TOPIC, payload)
-            print(f"📤 Enviado: {payload}")
+            current_motor_id = motor_ids[motor_idx]
+            motor_cycles = motors_data[current_motor_id]
+            
+            # Obtener el registro del ciclo actual
+            row = motor_cycles[cycle_idx]
+            
+            # Crear payload incluyendo el timestamp
+            payload_data = row.copy()
+            payload_data["timestamp"] = datetime.now().isoformat()
+            
+            payload_str = json.dumps(payload_data)
+            client.publish(TOPIC, payload_str)
+            print(f"📤 Enviado: Motor {current_motor_id} | Ciclo {row['ciclo']} | Sensores transmitidos")
+            
+            # Avanzar al siguiente ciclo/motor
+            cycle_idx += 1
+            if cycle_idx >= len(motor_cycles):
+                print(f"🏁 Motor {current_motor_id} completó todos sus ciclos de simulación.")
+                cycle_idx = 0
+                # Pasar al siguiente motor
+                motor_idx = (motor_idx + 1) % len(motor_ids)
+                print(f"🔄 Cambiando a Motor {motor_ids[motor_idx]}...")
+                
             time.sleep(3) # Envía cada 3 segundos
             
     except KeyboardInterrupt:
-        print("\n🛑 Simulador apagado.")
+        print("\n🛑 Simulador detenido por el usuario.")
     except Exception as e:
         print(f"❌ Error durante la simulación: {e}")
     finally:

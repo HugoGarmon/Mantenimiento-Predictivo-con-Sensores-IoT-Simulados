@@ -1,0 +1,55 @@
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# === Virtual Environment ===
+venv/
+.venv/
+env/
+ENV/
+
+# === IDE ===
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# === OS ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === Docker (datos locales generados) ===
+mosquitto_data/
+mosquitto_log/
+
+# === InfluxDB secrets (seguridad) ===
+influxdb/.env.*
+
+# === Jupyter Notebooks ===
+.ipynb_checkpoints/
+
+# === Logs ===
+*.log
+
+# === Misc ===
+.env
+*.bak
+*.tmp
+
+# === Datasets, Graphics & ML Runs ===
+NASA_C-MAPSS/
+graficos/
+mlruns/
+modelos_produccion/

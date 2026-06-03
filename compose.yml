@@ -32,6 +32,7 @@ services:
     volumes:
       - ./mosquitto/src/sensor_simulator.py:/app/sensor_simulator.py
       - ./mosquitto/src/requirements.txt:/app/requirements.txt
+      - ./mosquitto/src/test_FD001.txt:/app/test_FD001.txt
     command: >
       sh -c "pip install --no-cache-dir -r requirements.txt &&
              python -u sensor_simulator.py"

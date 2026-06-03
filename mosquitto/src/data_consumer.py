@@ -39,18 +39,32 @@ def on_message(client, userdata, msg):
     try:
         # 1. Decodificar el JSON real que envía tu simulador
         payload = json.loads(msg.payload.decode())
+        id_motor = payload.get("id_motor", 1)
+        ciclo = payload.get("ciclo", 0)
         
         # 2. Mostrar por consola lo que de verdad llega
         print(f"\n [{datetime.now().strftime('%H:%M:%S')}] {msg.topic}")
-        print(f"   📥 DATOS: Temp: {payload.get('temperature')} | Vib: {payload.get('vibration')}")
+        print(f"   📥 DATOS: Motor: {id_motor} | Ciclo: {ciclo} | {len(payload) - 3} variables de sensores y ajustes recibidas")
         
-        # 3. Crear el punto de datos para InfluxDB con los nombres correctos
+        # 3. Crear el punto de datos para InfluxDB dinámicamente
         punto = Point("telemetria_maquinaria") \
-            .tag("maquina_id", "machine_01") \
-            .field("temperatura", float(payload.get("temperature"))) \
-            .field("vibracion", float(payload.get("vibration"))) \
-            .field("presion", float(payload.get("pressure"))) \
-            .field("rpm", int(payload.get("rpm")))
+            .tag("maquina_id", f"machine_{id_motor:02d}") \
+            .tag("id_motor", str(id_motor))
+        
+        # Iterar sobre las claves del payload y agregarlas como campos
+        for key, val in payload.items():
+            if key in ["timestamp", "id_motor"]:
+                continue
+            
+            if key == "ciclo":
+                punto = punto.field(key, int(val))
+            elif "sensor" in key or "ajuste" in key:
+                punto = punto.field(key, float(val))
+            else:
+                try:
+                    punto = punto.field(key, float(val))
+                except ValueError:
+                    punto = punto.field(key, str(val))
         
         # 4. Escribir en la base de datos
         write_api.write(bucket=INFLUX_BUCKET, org=INFLUX_ORG, record=punto)
