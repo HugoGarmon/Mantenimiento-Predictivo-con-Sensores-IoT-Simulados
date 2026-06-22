@@ -475,7 +475,7 @@ print("Experimento registrado con éxito en MLflow.")
 print(f"Métricas del modelo LSTM -> MAE: {lstm_mae:.2f} | RMSE: {lstm_rmse:.2f} | R²: {lstm_r2:.4f}")
 
 # --- Anexo: Exportación Física de Modelos ---
-carpeta_salida = "./modelos_produccion"
+carpeta_salida = "./models"
 os.makedirs(carpeta_salida, exist_ok=True)
 print(f"\nIniciando exportación física en: '{carpeta_salida}'...")
 

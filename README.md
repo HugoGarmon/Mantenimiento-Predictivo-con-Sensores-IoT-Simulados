@@ -78,7 +78,7 @@ El pipeline de datos y los modelos de IA se alimentan del conjunto de datos **C-
 | `sensor_13` | Velocidad corregida del Fan (rpm) | **Activo** |
 | `sensor_14` | Velocidad corregida del núcleo (rpm) | *Redundante (Corr > 0.98) - Eliminada* |
 | `sensor_15` | Relación de bypass | **Activo** |
-| `sensor_16` | Eficiencia de la cámara de combustión | *Constante - Eliminada* |
+| `sensor_16` | Eficiencia de la cámara de combustión | **Activo** |
 | `sensor_17` | Entalpía de purga | **Activo** |
 | `sensor_18` | Velocidad nominal demandada del Fan (rpm) | *Constante - Eliminada* |
 | `sensor_19` | Velocidad corregida demandada del Fan (rpm) | *Constante - Eliminada* |
@@ -96,7 +96,7 @@ Para capturar vibración, fatiga y velocidad de degradación, calculamos en una 
 
 ### 🔄 Pipeline de Preparación e Inferencia
 1.  **Detección y Limpieza:** Se eliminan los 5 sensores constantes y el ajuste operativo 3. Se remueve la multicolinealidad eliminando el `sensor_14` (correlación lineal > 0.98 con `sensor_9`).
-2.  **Suavizado de Señal:** Se aplica una media móvil con ventana de 10 ciclos para mitigar el ruido blanco aleatorio.
+2.  Suavizado de Señal: Se aplica una media móvil con ventana de 5 ciclos para mitigar el ruido blanco aleatorio.
 3.  **Normalización Min-Max:** Se escala todo al rango `[0, 1]` utilizando el `scaler.pkl` ajustado en el entrenamiento.
 4.  **Matriz Temporal:** Se empaqueta en tensores de forma `(1, 30, 24)` (ventanas temporales de 30 ciclos de historia por 24 sensores/features).
 
@@ -136,12 +136,20 @@ El sistema emplea tres modelos especializados entrenados de forma integrada:
 *   Python 3.9 o superior.
 *   Puertos libres en localhost: `8000` (FastAPI), `8501` (Streamlit), `8086` (InfluxDB) y `1883` (Mosquitto).
 
-### 🚀 Despliegue en 3 Pasos
+### 🚀 Despliegue del Sistema
+
+#### 0. Configurar Entorno (`.env`)
+Crea un archivo `.env` en la raíz del proyecto con la configuración de InfluxDB. Puedes usar los valores por defecto generados en la instalación:
+```env
+INFLUXDB_URL=http://localhost:8086
+INFLUXDB_TOKEN=<tu-token-de-influxdb-generado-o-copiado-de-secrets>
+INFLUXDB_ORG=docs
+INFLUXDB_BUCKET=home
+```
 
 #### 1. Iniciar Infraestructura Docker
-Levanta los contenedores en segundo plano (MQTT, InfluxDB, Sensor Simulator, Data Consumer):
+Levanta los contenedores en segundo plano (MQTT, InfluxDB, Sensor Simulator, Data Consumer, API, Streamlit):
 ```bash
-docker network create shared-network
 docker compose up -d --build
 ```
 

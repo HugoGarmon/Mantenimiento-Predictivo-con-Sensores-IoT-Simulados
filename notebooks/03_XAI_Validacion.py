@@ -91,7 +91,7 @@ print(f"Secuencias 3D para Redes Neuronales preparadas: {X_test_3D.shape}")
 print(f"Secuencias 2D para XGBoost preparadas: {X_test_2D.shape}")
 
 # Carga de Modelos
-carpeta_produccion = "./modelos_produccion"
+carpeta_produccion = "./models"
 if not os.path.exists(carpeta_produccion):
     raise FileNotFoundError(f"No se encuentra la carpeta {carpeta_produccion}. Ejecuta primero 02_Modelos_IA.py")
 

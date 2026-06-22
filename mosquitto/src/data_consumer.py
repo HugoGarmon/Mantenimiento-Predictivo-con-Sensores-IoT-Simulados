@@ -5,18 +5,23 @@ from datetime import datetime
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 import time
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # --- Configuración MQTT ---
 # Asegúrate de que este nombre sea el que sale en el compose.yml (mosquitto)
 BROKER_HOST = os.getenv("BROKER_HOST", "mosquitto") 
 BROKER_PORT = int(os.getenv("BROKER_PORT", "1883"))
-TOPIC = "factory/machine_01/telemetry" # Asegúrate de que coincida con el simulador
+MQTT_USER = os.getenv("MQTT_USER")
+MQTT_PASSWORD = os.getenv("MQTT_PASSWORD")
+TOPIC = "factory/+/telemetry" # Suscribirse a todos los motores usando wildcard
 
 # --- Configuración InfluxDB ---
-INFLUX_URL = "http://influxdb2:8086"
-INFLUX_ORG = "docs"
-INFLUX_BUCKET = "home"
-INFLUX_TOKEN = "6wtWMbUQhEJfbEGL-JiVWpF-rL0jidkZnAkvrR1hSaPRTDKeh7zP-ep0NWyeQ3EOzKVgvctIAj8aLas1NQqXYQ==" 
+INFLUX_URL = os.getenv("INFLUXDB_URL", "http://influxdb2:8086")
+INFLUX_ORG = os.getenv("INFLUXDB_ORG", "docs")
+INFLUX_BUCKET = os.getenv("INFLUXDB_BUCKET", "home")
+INFLUX_TOKEN = os.getenv("INFLUXDB_TOKEN") 
 
 
 # --- Inicializar Cliente InfluxDB ---
@@ -78,6 +83,11 @@ if __name__ == "__main__":
     client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, "Consumidor_Ingesta")
     client.on_connect = on_connect
     client.on_message = on_message
+    
+    # Configurar autenticación si se provee
+    if MQTT_USER and MQTT_PASSWORD:
+        client.username_pw_set(MQTT_USER, MQTT_PASSWORD)
+        print(f"🔐 Usando autenticación MQTT para el usuario: {MQTT_USER}")
     
     connected = False
     while not connected:

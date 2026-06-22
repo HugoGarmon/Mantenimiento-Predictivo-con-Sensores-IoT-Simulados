@@ -2,14 +2,22 @@ import paho.mqtt.client as mqtt
 import json
 import time
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 
 # --- CONFIGURACIÓN MQTT ---
 BROKER = os.getenv("BROKER_HOST", "mosquitto")
 PORT = int(os.getenv("BROKER_PORT", "1883"))
-TOPIC = "factory/machine_01/telemetry"
+MQTT_USER = os.getenv("MQTT_USER")
+MQTT_PASSWORD = os.getenv("MQTT_PASSWORD")
+# Se construirá el topic dinámicamente como: factory/machine_{id_motor:02d}/telemetry
 
 DATA_FILE = "test_FD001.txt"
+
+# --- CONFIGURACIÓN SIMULADOR ---
+# Velocidad de simulación en milisegundos (por defecto 3000ms = 3s)
+SIMULATION_SPEED_MS = int(os.getenv("SIMULATION_SPEED_MS", "3000"))
+# Motores activos separados por comas (ej: "1,2,3,4,5"). "*" o vacío simula todos los 100 motores.
+ACTIVE_MOTORS_ENV = os.getenv("ACTIVE_MOTORS", "1")
 
 def load_dataset(file_path):
     """Carga y procesa el archivo de datos C-MAPSS."""
@@ -55,6 +63,11 @@ def load_dataset(file_path):
 def run_simulator():
     client = mqtt.Client(callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
     
+    # Configurar autenticación si se provee
+    if MQTT_USER and MQTT_PASSWORD:
+        client.username_pw_set(MQTT_USER, MQTT_PASSWORD)
+        print(f"🔐 Usando autenticación MQTT para el usuario: {MQTT_USER}")
+        
     # Intentar conectar al broker MQTT
     connected = False
     while not connected:
@@ -67,12 +80,12 @@ def run_simulator():
             time.sleep(5)
 
     print("🔌 Conectado al broker MQTT exitosamente.")
+    client.loop_start()
     
     # Cargar datos
     motors_data = load_dataset(DATA_FILE)
     if not motors_data:
         print("⚠ No se pudieron cargar datos del dataset. Usando fallback básico...")
-        # Fallback simple por si no existe el archivo
         motors_data = {
             1: [
                 {
@@ -87,45 +100,79 @@ def run_simulator():
             ]
         }
 
-    motor_ids = sorted(list(motors_data.keys()))
-    motor_idx = 0
-    cycle_idx = 0
+    # Resolver motores activos
+    all_motor_ids = sorted(list(motors_data.keys()))
+    active_motor_ids = []
     
-    print(f"🚀 Simulador ACTIVO. Enviando datos a {TOPIC}...")
+    if ACTIVE_MOTORS_ENV.strip() in ["*", ""]:
+        active_motor_ids = all_motor_ids
+        print(f"⚙️ Configuración: Simulando TODOS los {len(active_motor_ids)} motores de forma concurrente.")
+    else:
+        try:
+            active_motor_ids = [int(m.strip()) for m in ACTIVE_MOTORS_ENV.split(",") if m.strip()]
+            active_motor_ids = [m for m in active_motor_ids if m in motors_data]
+            if not active_motor_ids:
+                active_motor_ids = [1]
+            print(f"⚙️ Configuración: Simulando motores {active_motor_ids} de forma concurrente.")
+        except Exception as e:
+            print(f"⚠️ Error parseando ACTIVE_MOTORS. Usando motor 1. Detalle: {e}")
+            active_motor_ids = [1]
+
+    # Inicializar índices de ciclo para cada motor activo
+    # Estructura: {motor_id: {"cycle_idx": 0, "cycles": list_of_cycles}}
+    motor_states = {}
+    for m_id in active_motor_ids:
+        motor_states[m_id] = {
+            "cycle_idx": 0,
+            "cycles": motors_data[m_id]
+        }
+
+    interval_sec = max(0.1, SIMULATION_SPEED_MS / 1000.0)
+    print(f"🚀 Simulador ACTIVO. Velocidad: {SIMULATION_SPEED_MS}ms por ciclo. Enviando datos...")
     
     try:
         while True:
-            current_motor_id = motor_ids[motor_idx]
-            motor_cycles = motors_data[current_motor_id]
+            t0 = time.time()
             
-            # Obtener el registro del ciclo actual
-            row = motor_cycles[cycle_idx]
-            
-            # Crear payload incluyendo el timestamp
-            payload_data = row.copy()
-            payload_data["timestamp"] = datetime.now().isoformat()
-            
-            payload_str = json.dumps(payload_data)
-            client.publish(TOPIC, payload_str)
-            print(f"📤 Enviado: Motor {current_motor_id} | Ciclo {row['ciclo']} | Sensores transmitidos")
-            
-            # Avanzar al siguiente ciclo/motor
-            cycle_idx += 1
-            if cycle_idx >= len(motor_cycles):
-                print(f"🏁 Motor {current_motor_id} completó todos sus ciclos de simulación.")
-                cycle_idx = 0
-                # Pasar al siguiente motor
-                motor_idx = (motor_idx + 1) % len(motor_ids)
-                print(f"🔄 Cambiando a Motor {motor_ids[motor_idx]}...")
+            # Publicar un ciclo para cada motor activo en esta iteración
+            for m_id in active_motor_ids:
+                state = motor_states[m_id]
+                cycles = state["cycles"]
+                idx = state["cycle_idx"]
                 
-            time.sleep(3) # Envía cada 3 segundos
+                # Obtener datos de este ciclo
+                row = cycles[idx]
+                
+                # Crear payload e incluir timestamp
+                payload_data = row.copy()
+                payload_data["timestamp"] = datetime.now(timezone.utc).isoformat()
+                payload_str = json.dumps(payload_data)
+                
+                # Publicar a topic dinámico
+                topic = f"factory/machine_{m_id:02d}/telemetry"
+                client.publish(topic, payload_str)
+                print(f"📤 Enviado: Motor {m_id:02d} | Ciclo {row['ciclo']} -> {topic}")
+                
+                # Avanzar ciclo
+                idx += 1
+                if idx >= len(cycles):
+                    print(f"🏁 Motor {m_id:02d} completó todos sus ciclos. Reiniciando simulación...")
+                    idx = 0
+                state["cycle_idx"] = idx
+            
+            # Calcular sleep dinámico para mantener el intervalo regular
+            elapsed = time.time() - t0
+            sleep_time = max(0.01, interval_sec - elapsed)
+            time.sleep(sleep_time)
             
     except KeyboardInterrupt:
         print("\n🛑 Simulador detenido por el usuario.")
     except Exception as e:
         print(f"❌ Error durante la simulación: {e}")
     finally:
+        client.loop_stop()
         client.disconnect()
+        print("🔌 Desconectado del broker MQTT.")
 
 if __name__ == "__main__":
     run_simulator()

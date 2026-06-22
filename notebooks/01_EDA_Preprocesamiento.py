@@ -193,11 +193,9 @@ df_final[columnas_a_normalizar] = scaler.fit_transform(df_final[columnas_a_norma
 print(f"Columnas normalizadas: {len(columnas_a_normalizar)}")
 
 # Guardar Scaler para producción
-os.makedirs('modelos_produccion', exist_ok=True)
 os.makedirs('models', exist_ok=True)
-joblib.dump(scaler, 'modelos_produccion/scaler.pkl')
 joblib.dump(scaler, 'models/scaler.pkl')
-print("Scaler guardado en modelos_produccion/scaler.pkl y models/scaler.pkl")
+print("Scaler guardado en models/scaler.pkl")
 
 # =============================================================================
 # FASE 8: Exportación del Dataset de Entrenamiento
@@ -221,7 +219,7 @@ df_test_limpio = df_test.drop(columns=sensores_constantes)
 # Media móvil de 5 ciclos
 df_test_limpio[columnas_sensores] = (
     df_test_limpio.groupby('id_motor')[columnas_sensores]
-    .rolling(window=10, min_periods=1)
+    .rolling(window=5, min_periods=1)
     .mean()
     .reset_index(level=0, drop=True)
 )
